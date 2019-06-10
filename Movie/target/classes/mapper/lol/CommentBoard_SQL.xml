@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="commentboard">
+<select id="insertBoard" parameterType="hashmap">
+	insert into commentboard (co_id, co_regdt, co_moddt, co_content, bo_no)
+	values(#{co_id},now(),null,#{co_content},#{boNo})
+</select>
+<select id="selectBoardList" parameterType="hashmap" resultType="hashmap">
+	select *
+	from commentboard
+	where bo_no = #{boNo}
+    order by co_no desc
+    limit #{startcell},#{cell}
+</select>
+<select id="selectBoardListAll" parameterType="hashmap" resultType="hashmap">
+<![CDATA[
+	select *
+	from commentboard
+	where bo_no = #{boNo}
+	order by co_no desc;
+]]>
+</select>
+<select id="deleteBoard" parameterType="hashmap">
+	delete from commentboard
+	where co_no = #{coNo};
+</select>
+<select id="updateBoard" parameterType="hashmap">
+	update commentboard
+	set co_content = #{co_content}, moddt = now()
+	where co_no = #{coNo};
+</select>
+<select id="countboard" parameterType="hashmap" resultType="int">
+	select count(*)
+	from commentboard
+	where bo_no = #{boNo}
+</select>
+</mapper>

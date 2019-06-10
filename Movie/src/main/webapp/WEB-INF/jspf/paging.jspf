@@ -1,0 +1,83 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<div id="paging" align="center">
+<c:if test='${pageInfo.get("totalpage") != 0 }'>
+	<a href='javascript:PageLink(0)' class="gobtn">&laquo;</a>
+	<c:choose>
+		<c:when test='${pageInfo.get("currentpage") == 0 }'>
+		<a href='javascript:PageLink(0)' class="gobtn">&lt;</a>
+		</c:when>
+		<c:otherwise>
+		<a href='javascript:PageLink(${pageInfo.get("currentpage") - 1 })' class="gobtn">&lt;</a>&nbsp;
+		</c:otherwise>
+	</c:choose>
+	<c:choose>
+		<c:when test='${pageInfo.get("totalpage") < 10}'>
+		<c:forEach begin='0' end='${pageInfo.get("totalpage")-1}' var="row" varStatus="status">
+			<c:choose>
+			<c:when test='${ pageInfo.get("currentpage") == row }'>
+			<a href='javascript:PageLink(${ row})' class="current">${row+1}</a> &nbsp;
+			</c:when>
+			<c:otherwise>
+			<a href='javascript:PageLink(${ row})' class="num">${row+1}</a> &nbsp;
+			</c:otherwise>
+			</c:choose>
+		</c:forEach>
+		</c:when>
+		
+		<c:otherwise>
+		<c:choose>
+			<c:when test='${pageInfo.get("totalpage") - pageInfo.get("currentpage")+1 < 4}'>
+			<c:forEach begin='${pageInfo.get("totalpage")-9}' end='${pageInfo.get("totalpage")-1}' var="row" varStatus="status">
+				<c:choose>
+				<c:when test='${ pageInfo.get("currentpage") == row }'>
+				<a href='javascript:PageLink(${ row })' class="current">${row+1}</a> &nbsp;
+				</c:when>
+				<c:otherwise>
+				<a href='javascript:PageLink(${ row})' class="num">${row+1}</a> &nbsp;
+				</c:otherwise>
+				</c:choose>
+			</c:forEach>
+			</c:when>
+			
+			<c:when test='${pageInfo.get("currentpage") - 4 < 0}'>
+			<c:forEach begin='0' end='8' var="row" varStatus="status">
+				<c:choose>
+				<c:when test='${ pageInfo.get("currentpage") == row }'>
+				<a href='javascript:PageLink(${ row })' class="current">${row+1}</a> &nbsp;
+				</c:when>
+				<c:otherwise>
+				<a href='javascript:PageLink(${ row })' class="num">${row+1}</a> &nbsp;
+				</c:otherwise>
+				</c:choose>
+			</c:forEach>
+			</c:when>
+			
+			<c:otherwise>
+			<c:forEach begin='${pageInfo.get("currentpage")-4}' end='${pageInfo.get("currentpage")+4}' var="row" varStatus="status">
+				<c:choose>
+				<c:when test='${ pageInfo.get("currentpage") == row }'>
+				<a href='javascript:PageLink(${ row })' class="current">${row+1}</a> &nbsp;
+				</c:when>
+				<c:otherwise>
+				<a href='javascript:PageLink(${ row })' class="num">${row+1}</a> &nbsp;
+				</c:otherwise>
+				</c:choose>
+			</c:forEach>
+			</c:otherwise>
+		</c:choose>
+		</c:otherwise>	
+	</c:choose>
+	
+	<c:choose>
+		<c:when test='${pageInfo.get("currentpage")+1 == pageInfo.get("totalpage") }'>
+		<a href='javascript:PageLink(${pageInfo.get("totalpage")-1})' class="gobtn">&gt;</a>
+		</c:when>
+		<c:otherwise>
+		<a href='javascript:PageLink(${pageInfo.get("currentpage") + 1})' class="gobtn">&gt;</a>
+		</c:otherwise>
+	</c:choose>
+	
+	<a href='javascript:PageLink(${pageInfo.get("totalpage")-1})' class="gobtn">&raquo;</a>
+	</c:if>
+</div>

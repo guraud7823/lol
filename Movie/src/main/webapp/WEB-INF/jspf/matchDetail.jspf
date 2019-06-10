@@ -1,0 +1,301 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<div id="lolmain">
+	<c:forEach items='${matchInfo}' var="matchVar" varStatus="matchstatus">
+		<c:forEach items='${matchVar.get("playerInfo")}' var="row"
+			varStatus="status">
+			<c:if test='${summonerinfo.getAccountId() == row.get("accountId") }'>
+				<c:if test='${row.get("stats").get("win") == true}'>
+					<table border="1" style="background-color: #C4DEFF">
+						</c:if>
+						<c:if test='${row.get("stats").get("win") == false}'>
+							<table border="1" style="background-color: #FFB9B9">
+								</c:if>
+								<colgroup>
+									<col width="14%">
+									<col width="18%">
+									<col width="10%">
+									<col width="10%">
+									<col width="16%">
+									<col width="13%">
+									<col width="13%">
+									<col width="2%">
+								</colgroup>
+								<tbody>
+									<tr>
+										<td style="text-align: center; vertical-align: middle"><c:choose>
+												<c:when test='${matchVar.get("queueId") == 420}'>솔랭</c:when>
+												<c:when test='${matchVar.get("queueId") == 430}'>일반</c:when>
+												<c:when test='${matchVar.get("queueId") == 440}'>자유랭</c:when>
+												<c:when test='${matchVar.get("queueId") == 450}'>무작위총력전</c:when>
+												<c:otherwise>아직 미완</c:otherwise>
+											</c:choose><br> ${matchVar.get("gameCreation")}<br> <c:if
+												test='${row.get("stats").get("win") == true}'>승리</c:if> <c:if
+												test='${row.get("stats").get("win") == false}'>패배</c:if> <br>${String.format("%.0f" , matchVar.get("gameDuration")/60)}분
+											${matchVar.get("gameDuration")%60}초<br></td>
+										<td><br> <br> <a
+											href='javascript:ChampDetail(${row.get("championId")})'>
+												<img
+												src='${pageContext.request.contextPath}/images/champion/${row.get("championImg")}'
+												height="62" width="62" align="left"
+												style="margin-right: 10px;">
+										</a>
+											<div class="tooltip">
+												<img
+													src='${pageContext.request.contextPath}/images/spell/${row.get("spell1IdImg")}'
+													height="27" width="27" align="left"
+													style="margin-right: 5px;"> <span class="tooltiptext">
+													${row.get("spell1IdName")}<br> <br>
+													${row.get("spell1IdDescription")}<br> <br> 재사용
+													시간: ${row.get("spell1IdCooldownBurn")}
+												</span>
+											</div>
+											<div class="tooltip">
+												<img
+													src='${pageContext.request.contextPath}/images/${row.get("perkPrimaryStyleImg")}'
+													height="27" width="27" align="left">
+											</div> <br>
+											<div class="tooltip">
+												<img
+													src='${pageContext.request.contextPath}/images/spell/${row.get("spell2IdImg")}'
+													height="27" width="27" align="left"
+													style="margin-right: 5px;"> <span class="tooltiptext">
+													${row.get("spell2IdName")}<br> <br>
+													${row.get("spell2IdDescription")}<br> <br> 재사용
+													시간: ${row.get("spell2IdCooldownBurn")}
+												</span>
+											</div>
+											<div class="tooltip">
+												<img
+													src='${pageContext.request.contextPath}/images/${row.get("perkSubStyleImg")}'
+													height="27" width="27" align="left">
+											</div> <br>
+											<div align="center">${row.get("championName")}</div></td>
+
+										<td style="text-align: center; vertical-align: middle">
+											<div style="font-size: 20px;">
+												${row.get("stats").get("kills")}/${row.get("stats").get("deaths")}/${row.get("stats").get("assists")}
+											</div>
+										</td>
+
+										<td style="text-align: center; vertical-align: middle">
+											레벨: ${row.get("stats").get("champLevel")} <br>
+											<div class="tooltip">
+												${row.get("stats").get("neutralMinionsKilled")+row.get("stats").get("totalMinionsKilled")}
+												(${ String.format("%.1f" , (row.get("stats").get("neutralMinionsKilled")+row.get("stats").get("totalMinionsKilled"))/(matchVar.get("gameDuration")/60))})
+												CS <span class="tooltiptext"> 몬스터:
+													${row.get("stats").get("neutralMinionsKilled")} + 미니언:
+													${row.get("stats").get("totalMinionsKilled")} <br> 분당
+													CS: ${ String.format("%.1f" , (row.get("stats").get("neutralMinionsKilled")+row.get("stats").get("totalMinionsKilled"))/(matchVar.get("gameDuration")/60))}
+												</span>
+											</div> <br>
+										</td>
+
+										<td style="text-align: left; vertical-align: middle"><c:choose>
+												<c:when
+													test='${row.get("item0Info").getImage().getFull() != null}'>
+													<div class="tooltip">
+														<img
+															src='${pageContext.request.contextPath}/images/item/${row.get("item0Info").getImage().getFull()}'
+															height="24" width="24" align="left"
+															style="margin-right: 3px; margin-bottom: 3px;"> <span
+															class="tooltiptext">
+															${row.get("item0Info").getName()}<br> <br>
+															${row.get("item0Info").getDescription()}<br> <br>
+															구매가: ${row.get("item0Info").getGold().getTotal()}
+															(${row.get("item0Info").getGold().getBase()}) <br>
+															판매가: ${row.get("item0Info").getGold().getSell()}
+														</span>
+													</div>
+												</c:when>
+												<c:otherwise>
+													<div class="tooltip">
+														<img
+															src='${pageContext.request.contextPath}/images/null.png'
+															height="24" width="24" align="left"
+															style="margin-right: 3px; margin-bottom: 3px;">
+													</div>
+												</c:otherwise>
+											</c:choose> <c:choose>
+												<c:when
+													test='${row.get("item1Info").getImage().getFull() != null}'>
+													<div class="tooltip">
+														<img
+															src='${pageContext.request.contextPath}/images/item/${row.get("item1Info").getImage().getFull()}'
+															height="24" width="24" align="left"
+															style="margin-right: 3px; margin-bottom: 3px;"> <span
+															class="tooltiptext">
+															${row.get("item1Info").getName()}<br> <br>
+															${row.get("item1Info").getDescription()}<br> <br>
+															구매가: ${row.get("item1Info").getGold().getTotal()}
+															(${row.get("item1Info").getGold().getBase()}) <br>
+															판매가: ${row.get("item1Info").getGold().getSell()}
+														</span>
+													</div>
+												</c:when>
+												<c:otherwise>
+													<div class="tooltip">
+														<img
+															src='${pageContext.request.contextPath}/images/null.png'
+															height="24" width="24" align="left"
+															style="margin-right: 3px; margin-bottom: 3px;">
+													</div>
+												</c:otherwise>
+											</c:choose> <c:choose>
+												<c:when
+													test='${row.get("item2Info").getImage().getFull() != null}'>
+													<div class="tooltip">
+														<img
+															src='${pageContext.request.contextPath}/images/item/${row.get("item2Info").getImage().getFull()}'
+															height="24" width="24" align="left"
+															style="margin-right: 3px; margin-bottom: 3px;"> <span
+															class="tooltiptext">
+															${row.get("item2Info").getName()}<br> <br>
+															${row.get("item2Info").getDescription()}<br> <br>
+															구매가: ${row.get("item2Info").getGold().getTotal()}
+															(${row.get("item2Info").getGold().getBase()}) <br>
+															판매가: ${row.get("item2Info").getGold().getSell()}
+														</span>
+													</div>
+												</c:when>
+												<c:otherwise>
+													<div class="tooltip">
+														<img
+															src='${pageContext.request.contextPath}/images/null.png'
+															height="24" width="24" align="left"
+															style="margin-right: 3px; margin-bottom: 3px;">
+													</div>
+												</c:otherwise>
+											</c:choose> <c:choose>
+												<c:when
+													test='${row.get("item6Info").getImage().getFull() != null}'>
+													<div class="tooltip">
+														<img
+															src='${pageContext.request.contextPath}/images/item/${row.get("item6Info").getImage().getFull()}'
+															height="24" width="24" align="left"
+															style="margin-bottom: 3px;"> <span
+															class="tooltiptext">
+															${row.get("item6Info").getName()}<br> <br>
+															${row.get("item6Info").getDescription()}<br> <br>
+															구매가: ${row.get("item6Info").getGold().getTotal()}
+															(${row.get("item6Info").getGold().getBase()}) <br>
+															판매가: ${row.get("item6Info").getGold().getSell()}
+														</span>
+													</div>
+												</c:when>
+												<c:otherwise>
+													<div class="tooltip">
+														<img
+															src='${pageContext.request.contextPath}/images/null.png'
+															height="24" width="24" align="left"
+															style="margin-bottom: 3px;">
+													</div>
+												</c:otherwise>
+											</c:choose> <br> <c:choose>
+												<c:when
+													test='${row.get("item3Info").getImage().getFull() != null}'>
+													<div class="tooltip">
+														<img
+															src='${pageContext.request.contextPath}/images/item/${row.get("item3Info").getImage().getFull()}'
+															height="24" width="24" align="left"
+															style="margin-right: 3px; margin-bottom: 3px;"> <span
+															class="tooltiptext">
+															${row.get("item3Info").getName()}<br> <br>
+															${row.get("item3Info").getDescription()}<br> <br>
+															구매가: ${row.get("item3Info").getGold().getTotal()}
+															(${row.get("item3Info").getGold().getBase()}) <br>
+															판매가: ${row.get("item3Info").getGold().getSell()}
+														</span>
+													</div>
+												</c:when>
+												<c:otherwise>
+													<div class="tooltip">
+														<img
+															src='${pageContext.request.contextPath}/images/null.png'
+															height="24" width="24" align="left"
+															style="margin-right: 3px; margin-bottom: 3px;">
+													</div>
+												</c:otherwise>
+											</c:choose> <c:choose>
+												<c:when
+													test='${row.get("item4Info").getImage().getFull() != null}'>
+													<div class="tooltip">
+														<img
+															src='${pageContext.request.contextPath}/images/item/${row.get("item4Info").getImage().getFull()}'
+															height="24" width="24" align="left"
+															style="margin-right: 3px; margin-bottom: 3px;"> <span
+															class="tooltiptext">
+															${row.get("item4Info").getName()}<br> <br>
+															${row.get("item4Info").getDescription()}<br> <br>
+															구매가: ${row.get("item4Info").getGold().getTotal()}
+															(${row.get("item4Info").getGold().getBase()}) <br>
+															판매가: ${row.get("item4Info").getGold().getSell()}
+														</span>
+													</div>
+												</c:when>
+												<c:otherwise>
+													<div class="tooltip">
+														<img
+															src='${pageContext.request.contextPath}/images/null.png'
+															height="24" width="24" align="left"
+															style="margin-right: 3px; margin-bottom: 3px;">
+													</div>
+												</c:otherwise>
+											</c:choose> <c:choose>
+												<c:when
+													test='${row.get("item5Info").getImage().getFull() != null}'>
+													<div class="tooltip">
+														<img
+															src='${pageContext.request.contextPath}/images/item/${row.get("item5Info").getImage().getFull()}'
+															height="24" width="24" align="left"
+															style="margin-right: 3px; margin-bottom: 3px;"> <span
+															class="tooltiptext">
+															${row.get("item5Info").getName()}<br> <br>
+															${row.get("item5Info").getDescription()}<br> <br>
+															구매가: ${row.get("item5Info").getGold().getTotal()}
+															(${row.get("item5Info").getGold().getBase()}) <br>
+															판매가: ${row.get("item5Info").getGold().getSell()}
+														</span>
+													</div>
+												</c:when>
+												<c:otherwise>
+													<div class="tooltip">
+														<img
+															src='${pageContext.request.contextPath}/images/null.png'
+															height="24" width="24" align="left"
+															style="margin-right: 3px; margin-bottom: 3px;">
+													</div>
+												</c:otherwise>
+											</c:choose></td>
+
+										<td
+											style="white-space: nowrap; overflow: hidden; max-width: 100px">
+											<c:forEach items='${matchVar.get("playerInfo")}' var="row"
+												varStatus="status">
+												<c:if
+													test='${status.index == matchVar.get("playerInfo").size()/2 }'>
+													<br>
+										</td>
+										<td
+											style="white-space: nowrap; overflow: hidden; max-width: 100px">
+											</c:if> <a href='javascript:ChampDetail(${row.get("championId")})'>
+												<img
+												src='${pageContext.request.contextPath}/images/champion/${row.get("championImg")}'
+												height="22" width="22" align="left"
+												style="margin-right: 3px;">
+										</a>
+											<div style="height: 22px">
+												<a
+													href='javascript:SummonerDetail("${row.get("summonerName")}")'
+													style="color: gray; text-decoration: underline; text-decoration: none;">
+													${row.get("summonerName")} </a> <br>
+											</div> </c:forEach> <br>
+										</td>
+										<td>ㅜ</td>
+									</tr>
+								</tbody>
+							</table>
+						</c:if>
+						</c:forEach>
+						</c:forEach>
+						</div>
